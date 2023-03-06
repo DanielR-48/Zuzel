@@ -69,6 +69,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
         taby[i] = []
     }
 
+    //obj for players
     var myObj = {
         "players": [
             { "x": 190, "y": 310, "a": 0, "color": "255,0,0", "kolizja": true, "turn": false, "laps": 10, "lapoff": false, "gracz": "player1", "key": 37 },
@@ -83,6 +84,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
         b = ctx.getImageData(x, y, 1, 1).data[2]
     }
 
+    //turn
     function turn(n) {
         tabx[n].push(myObj.players[n].x)
         taby[n].push(myObj.players[n].y)
@@ -100,6 +102,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
         }
     }
 
+    //trace
     function slad(n) {
         ctx.lineWidth = 4;
         for (var i = 0; i < tabx[n].length; i++) {
@@ -110,6 +113,8 @@ document.addEventListener("DOMContentLoaded", function (event) {
             ctx.beginPath();
         }
     }
+
+    //counts number of laps
     function laps(n) {
         if (myObj.players[n].lapoff && myObj.players[n].x > 190 && myObj.players[n].y > 290 && myObj.players[n].y < 387) {
             myObj.players[n].lapoff = false
@@ -124,7 +129,6 @@ document.addEventListener("DOMContentLoaded", function (event) {
                 document.getElementById("wygrana").style.display = "block";
                 return 0;
             }
-            //alert("Gracz "+myObj.players[n].gracz+" wygrywa!")
         }
         if (myObj.players[n].y < 290) {
             myObj.players[n].lapoff = true
@@ -132,6 +136,8 @@ document.addEventListener("DOMContentLoaded", function (event) {
     }
     var wygranaprzezbrakgraczy = true
     var timestamp = 1000 / 60
+
+    //game engine
     function startgame() {
         function step(timestamp) {
             road()
@@ -147,7 +153,6 @@ document.addEventListener("DOMContentLoaded", function (event) {
                 if (licznikkolizji == numberofplayers - 1)
                     for (var i = 0; i < numberofplayers; i++) {
                         if (myObj.players[i].kolizja && wygranaprzezbrakgraczy) {
-                            //alert("Gracz "+myObj.players[i].gracz+" wygrywa!")
                             myObj.players[i].kolizja = false
                             document.getElementById("wygranatext").innerHTML = "Gracz " + myObj.players[i].gracz + " wygrywa!"
                             document.getElementById("wygrana").style.display = "block";
@@ -158,7 +163,6 @@ document.addEventListener("DOMContentLoaded", function (event) {
             }
             else {
                 if (myObj.players[0].kolizja == false && wygranaprzezbrakgraczy) {
-                    //alert("Przegrałeś")
                     document.getElementById("wygranatext").innerHTML = "Przegrałeś!"
                     document.getElementById("wygrana").style.display = "block";
                     wygranaprzezbrakgraczy = false
@@ -177,18 +181,22 @@ document.addEventListener("DOMContentLoaded", function (event) {
         window.requestAnimationFrame(step);
     }
 
+
+    //checks if key is pressed for turn
     document.addEventListener("keydown", function (e) {
-        if (e.keyCode == myObj.players[0].key && numberofplayers > 0) { myObj.players[0].turn = true }
-        else if (e.keyCode == myObj.players[1].key && numberofplayers > 1) { myObj.players[1].turn = true }
-        else if (e.keyCode == myObj.players[2].key && numberofplayers > 2) { myObj.players[2].turn = true }
-        else if (e.keyCode == myObj.players[3].key && numberofplayers > 3) { myObj.players[3].turn = true }
+        if (e.key == myObj.players[0].key && numberofplayers > 0) { myObj.players[0].turn = true }
+        else if (e.key == myObj.players[1].key && numberofplayers > 1) { myObj.players[1].turn = true }
+        else if (e.key == myObj.players[2].key && numberofplayers > 2) { myObj.players[2].turn = true }
+        else if (e.key == myObj.players[3].key && numberofplayers > 3) { myObj.players[3].turn = true }
     });
     document.addEventListener("keyup", function (e) {
-        if (e.keyCode == myObj.players[0].key && numberofplayers > 0) { myObj.players[0].turn = false }
-        else if (e.keyCode == myObj.players[1].key && numberofplayers > 1) { myObj.players[1].turn = false }
-        else if (e.keyCode == myObj.players[2].key && numberofplayers > 2) { myObj.players[2].turn = false }
-        else if (e.keyCode == myObj.players[3].key && numberofplayers > 3) { myObj.players[3].turn = false }
+        if (e.key == myObj.players[0].key && numberofplayers > 0) { myObj.players[0].turn = false }
+        else if (e.key == myObj.players[1].key && numberofplayers > 1) { myObj.players[1].turn = false }
+        else if (e.key == myObj.players[2].key && numberofplayers > 2) { myObj.players[2].turn = false }
+        else if (e.key == myObj.players[3].key && numberofplayers > 3) { myObj.players[3].turn = false }
     });
+
+    //starts game
     document.getElementById("startgame").onclick = function () {
         if (start && numberofplayers != 0) {
             startgame()
@@ -198,10 +206,12 @@ document.addEventListener("DOMContentLoaded", function (event) {
         else
             alert("Aby ropocząć grę dodaj przynajmniej 1 gracza")
     };
-    var top = 0
+    var top = 0 //???
+
+    //Menu and adding players
     document.addEventListener("keypress", function (e) {
         if (numberofplayers < 4 && start) {
-            myObj.players[numberofplayers].key = e.keyCode
+            myObj.players[numberofplayers].key = e.key
             numberofplayers++
             var playername = document.createElement("p")
             playername.style.display = "inline-block"
@@ -217,6 +227,8 @@ document.addEventListener("DOMContentLoaded", function (event) {
             document.getElementById("contener").appendChild(lap)
         }
     });
+
+    //resets game
     document.getElementById("resetgame").onclick = function () {
         myObj = {
             "players": [
